@@ -25,14 +25,17 @@ pipeline {
 
                 }
                 success {
-                    script {
-                        echo 'mvn clean success'
-                    }
+                    echo 'mvn clean success'
+                    /*script {
+                        
+                    }*/
                 }
                 failure {
-                    script {
-                        echo 'mvn clean failed'
-                    }
+
+                    echo 'mvn clean failed'
+                    /*script {
+                        
+                    }*/
                 }
             }
         }
