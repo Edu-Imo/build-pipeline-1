@@ -19,6 +19,7 @@ pipeline {
             post{
                 always {
                     echo 'Running mvn clean'
+                    echo pom.version
 
                 }
                 success {
