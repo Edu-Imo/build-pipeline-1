@@ -1,6 +1,8 @@
 pipeline {
     agent any
 
+    tools {mvn 'mvn3.6.3'}
+
     stages {
 
         stage('Clean') {
