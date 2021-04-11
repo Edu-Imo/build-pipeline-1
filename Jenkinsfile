@@ -9,7 +9,7 @@ pipeline {
         stage('Clean') {
             steps {
                 sh 'mvn clean'
-                echo "${version}"
+                sh "echo ${version}"
                 /*script {
                     echo 'mvn clean running'
                     //def version = readMavenPom().getVersion()
