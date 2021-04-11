@@ -2,19 +2,21 @@ pipeline {
     agent any
 
     tools {maven 'mvn3.6.3'}
+    environment {version = readMavenPom().getVersion()}
 
     stages {
 
         stage('Clean') {
             steps {
                 sh 'mvn clean'
-                script {
+                echo ${version}
+                /*script {
                     echo 'mvn clean running'
                     //def version = readMavenPom().getVersion()
                     //echo $version
                     pom = readMavenPom file: 'pom.xml'
                     echo pom.version
-                }
+                }*/
             }
             post{
                 always {
