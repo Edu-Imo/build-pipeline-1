@@ -1,2 +1,2 @@
 FROM tomcat:latest
-COPY 
+COPY /target/addressbook.war /usr/local/tomcat/webaps/addressbook.war
