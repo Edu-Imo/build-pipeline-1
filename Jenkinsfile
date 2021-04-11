@@ -10,10 +10,10 @@ pipeline {
                 sh 'mvn clean'
                 script {
                     echo 'mvn clean running'
-                    def version = readMavenPom().getVersion()
-                    echo $version
-                    //pom = readMavenPom file: 'pom.xml'
-                    //echo pom.version
+                    //def version = readMavenPom().getVersion()
+                    //echo $version
+                    pom = readMavenPom file: 'pom.xml'
+                    echo pom.version
                 }
             }
             post{
