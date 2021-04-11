@@ -18,6 +18,7 @@ pipeline {
             }
             post{
                 always {
+                    echo 'Running mvn clean'
 
                 }
                 success {
