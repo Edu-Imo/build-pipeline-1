@@ -8,15 +8,17 @@ pipeline {
         stage('Clean') {
             steps {
                 sh 'mvn clean'
+                script {
+                    echo 'mvn clean running'
+                    def version = readMavenPom().getVersion()
+                    echo $version
+                    //pom = readMavenPom file: 'pom.xml'
+                    //echo pom.version
+                }
             }
             post{
                 always {
-                    script {
-                        echo 'mvn clean running'
-                        def version = readMavenPom().getVersion()
-                        //pom = readMavenPom file: 'pom.xml'
-                        //echo pom.version
-                    }
+
                 }
                 success {
                     script {
