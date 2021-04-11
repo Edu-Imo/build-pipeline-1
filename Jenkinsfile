@@ -1,148 +1,61 @@
 pipeline {
-    agent any
+	agent any
 
-    tools {maven 'mvn3.6.3'}
-    environment {version = readMavenPom().getVersion()}
-
-    stages {
-
-        stage('Clean') {
-            steps {
-                sh 'mvn clean'
-                sh "echo ${env.version}"
-                /*script {
-                    echo 'mvn clean running'
-                    //def version = readMavenPom().getVersion()
-                    //echo $version
-                    pom = readMavenPom file: 'pom.xml'
-                    echo pom.version
-                }*/
-            }
-            post{
-                always {
-                    echo 'Running mvn clean'
-                    //echo pom.version
-
+	tools {maven "mvn3.6.6"}
+	
+	stages {
+		stage('Clean') {
+			steps {
+				sh 'mvn clean'	
+			}
+		}
+		stage('Test') {
+			steps {
+				sh 'mvn test'
+			}
+		}
+		stage('Compile') {
+			steps {
+				sh 'mvn compile'
+			}
+		}
+		stage('Package') {
+			steps {
+				sh 'mvn package'
+			}
+		}
+		stage('Build Docker Image') {
+			steps {
+                script {
+                    pom = readMavenPom file: pom.xml
                 }
-                success {
-                    echo 'mvn clean success'
-                    /*script {
-                        
-                    }*/
-                }
-                failure {
-
-                    echo 'mvn clean failed'
-                    /*script {
-                        
-                    }*/
-                }
-            }
-        }
-
-        /*stage('Test') {
-            steps {
-                sh 'mvn test'
-            }
-            post{
-                always {
-                    script {
-                        echo 'mvn test running'
-                    }
-                }
-                success {
-                    script {
-                        echo 'mvn test success'
-                    }
-                }
-                failure {
-                    script {
-                        echo 'mvn test failed'
-                    }
-                }
-            } 
-        }*/
-
-        stage('Compile') {
-            steps {
-                sh 'mvn compile'
-            }
-            post{
-                always {
-                    echo 'mvn compile running'
-                    /*script {
-                        
-                    }*/
-                }
-                success {
-                    echo 'mvn compile success'
-                    /*script {
-                        
-                    }*/
-                }
-                failure {
-                    echo 'mvn compile failed'
-                    /*script {
-                        
-                    }*/
-                }
-            }            
-
-        }
-
-        stage('Package') {
-            steps {
-                sh 'mvn package'
-            }
-            /*post{
-                always {
-                    script {
-                        echo 'mvn package running'
-                    }
-                }
-                success {
-                    script {
-                        echo 'mvn package success'
-                    }
-                }
-                failure {
-                    script {
-                        echo 'mvn package failed'
-                    }
-                }
-            }*/                       
-        }
-        stage ('Build-Docker-Image') {
-            steps {
-                sh 'docker build -t addressbook:latest .'
-
-            }
-        }
-        /*stage ('Tag Docker Image') {
-            steps {
-                // install the Pipeline Utility Steps plugin to read the pom file
-                //def pom = readMavenPom file: 'pom.xml'
-                pom = readMavenPom file: 'pom.xml'
-                //get git commit id
-                sh 'docker tag qui3tst0rm/pom.name:latest qui3tst0rm/pom.name:pom.version'
-                //sh 'docker tag qui3tst0rm/pom.name:latest qui3tst0rm/pom.name:commitid'
-            }
-        
-
-        }*/
-        /*stage('Push Docker Image') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDS', passwordVariable: 'DOCKER_HUB_PWD', usernameVariable: 'DOCKER_HUB_USER')]) {
-                    
-                    sh 'docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD'
-                }
-                    sh 'docker push vasistaops/addressbook:pom.version'
-                }
-        }*/
-    }
+				sh "docker build -t ${pom.name}:latest ."
+			}
+		}
+		stage('Tag Docker Image') {
+			steps {
+				script { 
+					pom = readMavenPom file: 'pom.xml'
+				}
+				sh "docker tag addressbook:latest qui3tst0rm/addressbook:${pom.version}"
+			}
+		}
+		stage('Push Docker Image') {
+			steps {
+				withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDS', passwordVariable: 'DOCKER_HUB_PWD', usernameVariable: 'DOCKER_HUB_USER')]) {
+					sh 'docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PWD'
+					sh "docker push qui3tst0rm/addressbook:${pom.version}"
+				}
+			}
+		}
+	}
 }
 
+//app version from package.json
+//cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g'
 
+//app name from package.json
+//cat package.json | grep name | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g'
 /*{
     "scripts": {
         "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags"
