@@ -105,7 +105,7 @@ pipeline {
 
             }
         }
-        stage ('Tag Docker Image') {
+        /*stage ('Tag Docker Image') {
             steps {
                 // install the Pipeline Utility Steps plugin to read the pom file
                 //def pom = readMavenPom file: 'pom.xml'
@@ -116,8 +116,8 @@ pipeline {
             }
         
 
-        }
-        stage('Push Docker Image') {
+        }*/
+        /*stage('Push Docker Image') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'DOCKER_CREDS', passwordVariable: 'DOCKER_HUB_PWD', usernameVariable: 'DOCKER_HUB_USER')]) {
                     
@@ -125,7 +125,7 @@ pipeline {
                 }
                     sh 'docker push vasistaops/addressbook:pom.version'
                 }
-        }
+        }*/
     }
 }
 
