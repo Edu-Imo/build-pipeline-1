@@ -13,8 +13,9 @@ pipeline {
                 always {
                     script {
                         echo 'mvn clean running'
-                        pom = readMavenPom file: 'pom.xml'
-                        echo pom.version
+                        def version = readMavenPom().getVersion()
+                        //pom = readMavenPom file: 'pom.xml'
+                        //echo pom.version
                     }
                 }
                 success {
