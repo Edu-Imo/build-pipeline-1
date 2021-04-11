@@ -69,19 +69,22 @@ pipeline {
             }
             post{
                 always {
-                    script {
-                        echo 'mvn compile running'
-                    }
+                    echo 'mvn compile running'
+                    /*script {
+                        
+                    }*/
                 }
                 success {
-                    script {
-                        echo 'mvn compile success'
-                    }
+                    echo 'mvn compile success'
+                    /*script {
+                        
+                    }*/
                 }
                 failure {
-                    script {
-                        echo 'mvn compile failed'
-                    }
+                    echo 'mvn compile failed'
+                    /*script {
+                        
+                    }*/
                 }
             }            
 
@@ -91,7 +94,7 @@ pipeline {
             steps {
                 sh 'mvn package'
             }
-            post{
+            /*post{
                 always {
                     script {
                         echo 'mvn package running'
@@ -107,7 +110,7 @@ pipeline {
                         echo 'mvn package failed'
                     }
                 }
-            }                       
+            }*/                       
         }
         stage ('Build-Docker-Image') {
             steps {
