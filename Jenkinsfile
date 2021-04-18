@@ -23,6 +23,12 @@ pipeline {
 			steps {
 				sh 'mvn package'
 			}
+			post {
+				always {
+					archiveArtifacts(artifacts: 'syarpa-ticket-service.zip', fingerprint: true)
+					
+				}
+			}
 		}
 		stage('Build Docker Image') {
 			steps {
