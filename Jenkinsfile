@@ -22,13 +22,14 @@ pipeline {
 		stage('Package') {
 			steps {
 				sh 'mvn package'
+				
 			}
-			post {
+			/*post {
 				always {
-					archiveArtifacts(artifacts: 'syarpa-ticket-service.zip', fingerprint: true)
+					archiveArtifacts(artifacts: "${pom.artifactId}.war", fingerprint: true)
 					
 				}
-			}
+			}*/
 		}
 		stage('Build Docker Image') {
 			steps {
